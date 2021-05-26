@@ -1,1 +1,1 @@
-# flavorites-frontend
+# flavorites-front-end
