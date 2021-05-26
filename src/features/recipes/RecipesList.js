@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectAllRecipes, fetchRecipes } from "./recipesSlice";
 import RecipeExcerpt from "./RecipeExcerpt";
@@ -9,7 +9,7 @@ const RecipesList = () => {
   const recipesStatus = useSelector((state) => state.recipes.status);
   const error = useSelector((state) => state.recipes.error);
   const offset = useSelector((state) => state.recipes.offset);
-  const count = useSelector((state) => state.recipes.count);
+  //const count = useSelector((state) => state.recipes.count);
   const limit = useSelector((state) => state.recipes.limit);
 
 
@@ -17,7 +17,7 @@ const RecipesList = () => {
     if (recipesStatus === "idle") {
       dispatch(fetchRecipes({limit, offset}));
     }
-  }, [recipesStatus, dispatch]);
+  }, [recipesStatus, dispatch, limit, offset]);
 
   let content;
   if (recipesStatus === "loading") {

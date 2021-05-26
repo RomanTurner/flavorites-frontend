@@ -39,12 +39,28 @@ export const fetchRecipes = createAsyncThunk(
     }
 )
 
+export const fetchRecipe = createAsyncThunk(
+  "recipes/fetchRecipe",
+  async ({ id }) => {
+    const configObj = {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `bearer ${localStorage.getItem("jwt")}`,
+      },
+    };
+
+    const recipeURL = `${url}/${id}`;
+    const response = await fetch(recipeURL, configObj);
+    return response.json();
+  }
+);
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState,
   reducers: {},
   extraReducers: {
-    [fetchRecipes.pending]: (state, action) => {
+    [fetchRecipes.pending]: (state) => {
       state.status = "loading";
     },
     [fetchRecipes.fulfilled]: (state, action) => {
@@ -52,6 +68,17 @@ export const recipesSlice = createSlice({
       state.recipes = state.recipes.concat(action.payload.recipes)
     },
     [fetchRecipes.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    },
+    [fetchRecipe.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchRecipe.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.recipe = action.payload
+    },
+    [fetchRecipe.rejected]: (state, action) => {
       state.status = "failed";
       state.error = action.error.message;
     },

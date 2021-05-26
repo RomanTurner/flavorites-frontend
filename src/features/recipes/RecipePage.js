@@ -1,26 +1,37 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { selectRecipeById, fetchRecipes } from "./recipesSlice";
+import { fetchRecipe } from "./recipesSlice";
+import RenderRecipe from "./RenderRecipe"
 
 const RecipePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const recipesStatus = useSelector((state) => state.recipes.status);
   const error = useSelector((state) => state.recipes.error);
-  const offset = useSelector((state) => state.recipes.offset);
-  const count = useSelector((state) => state.recipes.count);
-  const limit = useSelector((state) => state.recipes.limit);
+  
   
   useEffect(() => {
-      if (recipesStatus === "idle") {
-          dispatch(fetchRecipes({ limit, offset }));
-        }
-    }, [recipesStatus, dispatch]);
+        dispatch(fetchRecipe({ id }));
+    }, []);
     
-    const recipe = useSelector((state) => selectRecipeById(state, +id));
-
-    return <div>hi</div>;
+const recipe = useSelector((state) => state.recipes.recipe);
+   
+      let content;
+      if (recipesStatus === "loading") {
+        content = <div> Loading...</div>;
+      } else if (recipesStatus === "succeeded") {
+        content = <RenderRecipe recipe={recipe} />
+      } else if (recipesStatus === "error") {
+        content = <div>{error}</div>;
+      }
+  
+  
+      return (
+        <section>
+          {content}
+        </section>
+      );
 };
 
 

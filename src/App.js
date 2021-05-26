@@ -10,6 +10,8 @@ import PrivateRoute from "./routes/PrivateRoutes"
 import Login from "./routes/Login"
 import RecipesList from "./features/recipes/RecipesList";
 import RecipePage from "./features/recipes/RecipePage";
+import PlansList from "./features/plans/PlansList";
+import PlanPage from "./features/plans/PlanPage";
 import NotFoundPage from "./routes/NotFoundPage";
 
 
@@ -19,6 +21,8 @@ const Dashboard = () => {
 
 export default function App() {
   const loggedIn = useSelector(selectLoggedIn);
+
+
   //clears
   const loggingOut = () => {
     window.localStorage.clear();
@@ -37,9 +41,16 @@ export default function App() {
         <li>
           <Link to='/login'>Login</Link>
         </li>
+        <li>
+          <Link to='/meal_plans'>Meal Plans</Link>
+        </li>
       </ul>
+      {loggedIn ? (
+        <button onClick={() => loggingOut()}>Sign Out</button>
+      ) : (
+        "You are not logged in"
+      )}
       <Switch>
-
         <Route path='/login'>
           <Login />
         </Route>
@@ -50,6 +61,14 @@ export default function App() {
 
         <PrivateRoute exact path='/recipes'>
           <RecipesList />
+        </PrivateRoute>
+
+        <PrivateRoute exact path='/meal_plans/:id'>
+          <PlanPage />
+        </PrivateRoute>
+
+        <PrivateRoute exact path='/meal_plans'>
+          <PlansList />
         </PrivateRoute>
 
         <PrivateRoute exact path='/'>
@@ -63,13 +82,7 @@ export default function App() {
         <PrivateRoute path='*'>
           <NotFoundPage />
         </PrivateRoute>
-
       </Switch>
-      {loggedIn ? (
-        <button onClick={() => loggingOut()}>Sign Out</button>
-      ) : (
-        "You are not logged in"
-      )}
     </div>
   );
 }
