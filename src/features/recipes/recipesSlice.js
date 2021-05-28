@@ -8,10 +8,9 @@ const url = "http://localhost:3000/recipes"
 const initialState = {
   recipes: [],
   status: "idle",
+  soloStatus: "idle",
   error: null,
   counter: localStorage.getItem("counter") || 0,
-  limit: 24,
-  offset: localStorage.getItem("offset") || 0,
 };
 
 /*
@@ -24,20 +23,22 @@ Returns a paginated array of recipes.
 
 export const fetchRecipes = createAsyncThunk(
   "recipes/fetchRecipes",
-  async({limit, offset}) => {
-        const configObj = {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': `bearer ${localStorage.getItem('jwt')}`
-            }
-        }
-    
-    const paginatedUrl = `${url}/?limit=${limit}&offset=${offset}`
+  async (counter) => {
+    const configObj = {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `bearer ${localStorage.getItem("jwt")}`,
+      },
+    };
+    const limit = 24
+    const offset = limit * counter;
+    const paginatedUrl = `${url}/?limit=${limit}&offset=${offset}`;
     const response = await fetch(paginatedUrl, configObj);
-    return response.json()
-    }
-)
+    localStorage.setItem("counter", counter);
+    return response.json();
+  }
+);
 
 export const fetchRecipe = createAsyncThunk(
   "recipes/fetchRecipe",
@@ -55,6 +56,7 @@ export const fetchRecipe = createAsyncThunk(
     return response.json();
   }
 );
+
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState,
@@ -65,21 +67,21 @@ export const recipesSlice = createSlice({
     },
     [fetchRecipes.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.recipes = state.recipes.concat(action.payload.recipes)
+      state.recipes = action.payload.recipes
     },
     [fetchRecipes.rejected]: (state, action) => {
       state.status = "failed";
       state.error = action.error.message;
     },
     [fetchRecipe.pending]: (state) => {
-      state.status = "loading";
+      state.soloStatus = "loading";
     },
     [fetchRecipe.fulfilled]: (state, action) => {
-      state.status = "succeeded";
+      state.soloStatus = "succeeded";
       state.recipe = action.payload
     },
     [fetchRecipe.rejected]: (state, action) => {
-      state.status = "failed";
+      state.soloStatus = "failed";
       state.error = action.error.message;
     },
   },
@@ -91,3 +93,5 @@ export const selectAllRecipes = state => state.recipes.recipes;
 export const selectRecipeById = (state, rId) => {
   state.recipes.recipes.find((recipe) => recipe.id === rId)
 };
+
+

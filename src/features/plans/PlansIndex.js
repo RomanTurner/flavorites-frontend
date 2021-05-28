@@ -1,28 +1,28 @@
 import React, { useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAllPlans, fetchPlans } from "./plansSlice";
+import { nanoid } from "@reduxjs/toolkit"
+import { selectAllPlans } from "./plansSlice";
+import { fetchPlans } from "./planFetches";
 import PlanExcerpt from "./PlanExcerpt";
 
-const PlansList = () => {
+const PlansIndex = () => {
   const dispatch = useDispatch();
   const plans = useSelector(selectAllPlans);
-  const plansStatus = useSelector((state) => state.plans.status);
+  const status = useSelector((state) => state.plans.status);
   const error = useSelector((state) => state.plans.error);
 
   useEffect(() => {
-    if (plansStatus === "idle") {
+   if (status === "idle") {
       dispatch(fetchPlans());
     }
-  }, [plansStatus, dispatch]);
+  }, [status, dispatch]);
 
   let content;
-  if (plansStatus === "loading") {
+  if (status === "loading") {
     content = <div> Loading...</div>;
-  } else if (plansStatus === "succeeded") {
-    content = plans.map((plan) => (
-      <PlanExcerpt key={plan.id} {...plan} />
-    ));
-  } else if (plansStatus === "failed") {
+  } else if (status === "succeeded") {
+    content = plans.map((plan) => <PlanExcerpt key={nanoid()} {...plan} />);
+  } else if (status === "failed") {
     content = <div>{error}</div>;
   }
 
@@ -34,4 +34,4 @@ const PlansList = () => {
   );
 };
 
-export default PlansList;
+export default PlansIndex;

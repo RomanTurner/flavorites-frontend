@@ -33,7 +33,6 @@ const Login = () => {
 
   const setPagination = () => {
     localStorage.setItem("counter", 0);
-    localStorage.setItem("offset", 0);
   };
 
   const handleLogin = async (e) => {
@@ -41,7 +40,7 @@ const Login = () => {
     try {
       await dispatch(fetchLogin({ username, password }));
       setPagination();
-      history.push("/recipes");
+      history.push("/meal_plans");
     } catch (err) {
       console.error("Failed to fetch the user: ", err);
     } finally {
