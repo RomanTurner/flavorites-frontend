@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import {nanoid} from "@reduxjs/toolkit"
+//MATERIAL UI
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -12,7 +15,6 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 import KitchenOutlinedIcon from "@material-ui/icons/KitchenOutlined";
 import RestaurantOutlinedIcon from "@material-ui/icons/RestaurantOutlined";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
-import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function DrawerListItem() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-
+  const [open, setOpen] = useState(true);
   const handleClick = () => {
     setOpen(!open);
   };
@@ -54,6 +56,7 @@ export default function DrawerListItem() {
   const nestedListItems = stuff.map((item) => {
     return (
       <ListItem
+        key={nanoid()}
         button
         to={item.path}
         component={Link}

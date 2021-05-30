@@ -1,7 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
 const url = "http://localhost:3000/recipes"
 
@@ -31,7 +28,7 @@ export const fetchRecipes = createAsyncThunk(
         Authorization: `bearer ${localStorage.getItem("jwt")}`,
       },
     };
-    const limit = 24
+    const limit = 12
     const offset = limit * counter;
     const paginatedUrl = `${url}/?limit=${limit}&offset=${offset}`;
     const response = await fetch(paginatedUrl, configObj);
@@ -57,6 +54,23 @@ export const fetchRecipe = createAsyncThunk(
   }
 );
 
+export const searchRecipes = createAsyncThunk(
+  "recipes/searchRecipes",
+  async (searchTerm) => {
+    const configObj = {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `bearer ${localStorage.getItem("jwt")}`,
+      },
+    };
+
+    const searchURL = `${url}_search/?search=${searchTerm}`;
+    const response = await fetch(searchURL, configObj);
+    return response.json();
+  }
+);
+
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState,
@@ -70,6 +84,17 @@ export const recipesSlice = createSlice({
       state.recipes = action.payload.recipes
     },
     [fetchRecipes.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    },
+    [searchRecipes.pending]: (state) => {
+      state.status = "loading";
+    },
+    [searchRecipes.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.recipes = action.payload.recipes
+    },
+    [searchRecipes.rejected]: (state, action) => {
       state.status = "failed";
       state.error = action.error.message;
     },

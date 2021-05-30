@@ -31,7 +31,6 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const classes = useStyles;
   const [value, setValue] = useState("");
-
   const planStatus = useSelector((state) => state.plans.planStatus);
   const mealPlans = useSelector((state) => state.plans.sessionPlans);
   const error = useSelector((state) => state.session.error);
