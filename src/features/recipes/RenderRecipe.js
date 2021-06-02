@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { getCurrentUsersPlans, addRecipeToPlan } from "../plans/planFetches";
+import { getCurrentUsersPlans, addRecipeToPlan } from "../user-plans/planFetches";
 import { nanoid } from "@reduxjs/toolkit"
 
 //MATERIAL UI
@@ -39,38 +39,44 @@ const RenderRecipe = ({ recipe }) => {
     // tips,
   } = recipe;
 
+ const regex = new RegExp("webp*");
+ const imgTest = regex.test(main_img);
+ const img = imgTest
+   ? main_img
+   : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png"; 
+ 
   const classes = useStyles();
   const history = useHistory();
-  const lastLocation = sessionStorage.getItem("history");
   const dispatch = useDispatch();
-  const plans = useSelector((state) => state.plans.sessionPlans);
-  const planStatus = useSelector((state) => state.plans.planStatus);
+  const plans = useSelector((state) => state.userPlans.plans);
+  const planStatus = useSelector((state) => state.userPlans.status);
   const [value, setValue] = useState("");
 
+  //grabs the plans from the store to map the names in the select form
   useEffect(() => {
     if (planStatus === "idle") {
       dispatch(getCurrentUsersPlans());
     }
   }, [dispatch, planStatus]);
+ 
 
-  const handleClick = () => {
-    history.goBack();
-  };
-
+  //value is the id of the meal plan
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
+  //when selecting the name of meal plan to add the recipe to we grab the id in the value
+  //we want to set the inital value of the plan to 
   const handleSubmit = (e) => {
     e.preventDefault();
     const body = {
-        recipe_id: id,
-        meal_plan_id: value,
+      recipe_id: id,
+      meal_plan_id: value,
     };
 
     dispatch(addRecipeToPlan(body))
       .then(unwrapResult)
-      .then(({ meal_plan }) => history.push(`/meal_plans/${meal_plan}`)) //originalPromiseResult
+      .then(({id}) => history.push(`/user_plans/${id}`) )//originalPromiseResult 
       .catch((error) => console.error("error: ", error)); //rejectedValueOrSerializedError
   };
 
@@ -108,12 +114,11 @@ const RenderRecipe = ({ recipe }) => {
       <div>{author}</div>
       <div>
         <a href={"https://github.com/RomanTurner"}>
-          <img src={main_img} alt={title} />
+          <img src={img} alt={title} />
         </a>
       </div>
       <div>{description}</div>
-      <button onClick={() => handleClick()}>Go Back</button>
-      {lastLocation === "recipes" && addRecipeToPlanForm()}
+      {addRecipeToPlanForm()}
     </div>
   );
 };

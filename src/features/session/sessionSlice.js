@@ -38,12 +38,7 @@ export const fetchSession = createAsyncThunk("session/fetchSession", async () =>
   const response = await fetch(SESH_URL, configObj);
   return response.json();
 });
-// const addItemToArray = (state, action) => {
-//   state.push(action.payload);
-// };
-// const removeItemToArray = (state, action) => {
-//   state.filter(action.payload);
-// };
+
  
 export const sessionSlice = createSlice({
   name: "session",

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { fetchRecipe } from "./recipesSlice";
-import { fetchPlans } from "../plans/planFetches";
+import { fetchPlans } from "../plans/plansSlice";
 import RenderRecipe from "./RenderRecipe";
 
 const RecipeShow = () => {

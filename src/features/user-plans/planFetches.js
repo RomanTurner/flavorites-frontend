@@ -24,7 +24,7 @@ export const createMealPlan = createAsyncThunk(
 
 //Fetches current session user's meal plans
 export const getCurrentUsersPlans = createAsyncThunk(
-  "plans/getCurrentUsersPlans",
+  "userPlans/getCurrentUsersPlans",
   async () => {
     const configObj = {
       method: "GET",
@@ -40,7 +40,7 @@ export const getCurrentUsersPlans = createAsyncThunk(
 
 //Add Recipe to current user Meal Plan
 export const addRecipeToPlan = createAsyncThunk(
-  "plans/addRecipeToPlan",
+  "userPlans/addRecipeToPlan",
   async (body) => {
     const configObj = {
       method: "POST",
@@ -56,35 +56,23 @@ export const addRecipeToPlan = createAsyncThunk(
   }
 );
 
-//Get all plans
-export const fetchPlans = createAsyncThunk("plans/fetchPlans", async () => {
-  const configObj = {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-      "Authorization": `bearer ${localStorage.getItem("jwt")}`,
-    },
-  };
-  const response = await fetch(PLANS_URL, configObj);
-  return response.json();
-});
 
 //Delete plan
-export const deletePlan = createAsyncThunk("plans/deletePlans", async (id) => {
-    const configObj = {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `bearer ${localStorage.getItem("jwt")}`,
-        },
-    };
-    await fetch(PLANS_URL+id, configObj);
-    return id; 
-})
+export const deletePlan = createAsyncThunk("userPlans/deletePlans", async (id) => {
+  const configObj = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `bearer ${localStorage.getItem("jwt")}`,
+    },
+  };
+  await fetch(PLANS_URL + id, configObj);
+  return id;
+});
 
 //Delete recipe from plan
 export const deleteRecipeFromMealPlan = createAsyncThunk(
-  "plans/deleteRecipeFromMealPlan",
+  "userPlans/deleteRecipeFromMealPlan",
   async (body) => {
     const configObj = {
       method: "DELETE",
@@ -93,7 +81,10 @@ export const deleteRecipeFromMealPlan = createAsyncThunk(
         Authorization: `bearer ${localStorage.getItem("jwt")}`,
       },
     };
-    await fetch(`${MP_RECIPES_URL}1?meal_plan_id=${body.mealPlan}&recipe_id=${body.recipeId}`, configObj);
+    await fetch(
+      `${MP_RECIPES_URL}1?meal_plan_id=${body.mealPlan}&recipe_id=${body.recipeId}`,
+      configObj
+    );
     return body;
   }
 );

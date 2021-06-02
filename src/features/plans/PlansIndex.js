@@ -2,7 +2,7 @@ import React, { useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit"
 import { selectAllPlans } from "./plansSlice";
-import { fetchPlans } from "./planFetches";
+import { fetchPlans } from "../plans/plansSlice";
 import PlanExcerpt from "./PlanExcerpt";
 
 const PlansIndex = () => {

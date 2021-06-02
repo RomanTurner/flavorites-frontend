@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import PlanExcerpt from "../plans/PlanExcerpt";
+import UserPlanExcerpt from "../user-plans/UserPlansExcerpt";
+import { fetchSession } from "../session/sessionSlice";
+import { nanoid } from "@reduxjs/toolkit"
 import {
   createMealPlan,
   getCurrentUsersPlans,
-} from "../plans/planFetches";
-import { fetchSession } from "../session/sessionSlice";
-import RenderFollow from "./RenderFollow";
-import FollowContainer from "./FollowContainer";
-import { nanoid } from "@reduxjs/toolkit"
-//import RecipeExcerpt from "../recipes/RecipeExcerpt";
+} from "../user-plans/planFetches";
 
+//MATERIAL UI
 import { makeStyles } from "@material-ui/core/styles";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
@@ -31,51 +29,26 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const classes = useStyles;
   const [value, setValue] = useState("");
-  const planStatus = useSelector((state) => state.plans.planStatus);
-  const mealPlans = useSelector((state) => state.plans.sessionPlans);
+  const status = useSelector((state) => state.userPlans.status);
+  const mealPlans = useSelector((state) => state.userPlans.plans);
   const error = useSelector((state) => state.session.error);
-  const followers = useSelector((state) => state.session.followers);
-  const following = useSelector((state) => state.session.following);
-
+ 
   useEffect(() => {
-    if (planStatus === "idle") {
+    if (status === "idle") {
       dispatch(getCurrentUsersPlans());
       dispatch(fetchSession());
     }
-  }, [planStatus, dispatch]);
+  }, [status, dispatch]);
 
   let mealPlanContent;
-  let followingContent;
-  let followersContent;
-
-  if (planStatus === "loading") {
+  if (status === "loading") {
     mealPlanContent = <div> Loading...</div>;
-  } else if (planStatus === "succeeded") {
+  } if (status === "succeeded") {
     //Maps content for the session user's meal plans
     mealPlanContent = mealPlans.map((plan) => (
-      <PlanExcerpt key={nanoid()} {...plan} />
+      <UserPlanExcerpt key={nanoid()} {...plan} />
     ));
-    //Maps content for users that the session user is being followed by
-    followersContent = (
-      <FollowContainer title={"Who is Following You"}>
-        {followers.map((follow) => (
-          <RenderFollow key={nanoid()} {...follow} />
-        ))}
-      </FollowContainer>
-    );
-  
-    //Maps content for users the session user is following
-    followingContent =
-      following.length === 0 ? (
-        <div>Following No One</div>
-      ) : (
-        <FollowContainer title={"Who You are Following"}>
-          {following.map((follow) => (
-            <RenderFollow key={nanoid()} {...follow} />
-          ))}
-        </FollowContainer>
-      );
-  } else if (planStatus === "failed") {
+  } if (status === "failed") {
     mealPlanContent = <div>{error}</div>;
   }
 
@@ -85,7 +58,7 @@ const Dashboard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createMealPlan({ meal_plan: { title: value } }));
+    dispatch(createMealPlan({ title: value }));
     setValue('');
   };
 
@@ -110,10 +83,8 @@ const Dashboard = () => {
   return (
     <section className='posts-list'>
       <h2>Dashboard</h2>
-      {mealPlanContent}
-      {followingContent}
-      {followersContent}
-      {mealPlanForm}
+      <div>{mealPlanContent}</div>
+      <div>{mealPlanForm}</div>
     </section>
   );
 };

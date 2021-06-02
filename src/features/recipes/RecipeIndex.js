@@ -51,10 +51,10 @@ const RecipesIndex = () => {
   }, [recipesStatus, dispatch, counter]);
 
   let content = recipes.map((recipe) => (
-      <Grid key={nanoid()} item xs={3}>
-        <RecipeExcerpt key={nanoid()} {...recipe} />
-      </Grid>
-    ));
+    <Grid key={nanoid()} item xs={12} sm={6} md={3}>
+      <RecipeExcerpt key={nanoid()} {...recipe} />
+    </Grid>
+  ));
 
 
   const handlePage = (e, value) => {

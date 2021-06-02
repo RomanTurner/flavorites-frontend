@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const USER_URL = "http://localhost:3000/users";
+//const USER_URL = "http://localhost:3000/users";
 
 const initialState = {
   user: {},

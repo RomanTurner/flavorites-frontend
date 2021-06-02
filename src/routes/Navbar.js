@@ -8,6 +8,8 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import DrawerListItem from "./DrawerListItem";
+import IconButton from "@material-ui/core/IconButton";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -42,8 +44,11 @@ export default function ClippedDrawer({children}) {
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
           <Typography variant='h6' noWrap>
-            Clipped drawer
+            Handshake
           </Typography>
+          <IconButton aria-label='label' color='inherit'>
+              <SupervisorAccountIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -56,7 +61,7 @@ export default function ClippedDrawer({children}) {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <DrawerListItem/>
+            <DrawerListItem />
           </List>
           <Divider />
         </div>

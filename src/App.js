@@ -2,14 +2,9 @@ import React from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { selectLoggedIn } from "./features/session/sessionSlice";
 import { useSelector } from "react-redux";
+import { routes } from "./routes/routes"
 import PrivateRoute from "./routes/PrivateRoutes";
 import Login from "./routes/Login";
-import RecipesIndex from "./features/recipes/RecipeIndex";
-import RecipeShow from "./features/recipes/RecipeShow";
-import PlansIndex from "./features/plans/PlansIndex";
-import PlanShow from "./features/plans/PlanShow";
-import NotFoundPage from "./routes/NotFoundPage";
-import Dashboard from "./features/session/Dashboard";
 
 export default function App() {
   const location = useLocation();
@@ -51,33 +46,4 @@ export default function App() {
   );
 }
 
-const routes = [
-  {
-    path: "/meal_plans/:id",
-    component: PlanShow,
-  },
-  {
-    path: "/meal_plans",
-    component: PlansIndex,
-  },
-  {
-    path: "/recipes/:id",
-    component: RecipeShow,
-  },
-  {
-    path: "/recipes",
-    component: RecipesIndex,
-  },
-  {
-    path: "/dashboard",
-    component: Dashboard,
-  },
-  {
-    path: "/",
-    component: Dashboard,
-  },
-  {
-    path: "*",
-    component: NotFoundPage,
-  },
-];
+
