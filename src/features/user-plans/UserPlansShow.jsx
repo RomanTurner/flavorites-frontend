@@ -1,59 +1,30 @@
 import Column from './Column'
-import {nanoid} from "@reduxjs/toolkit"
+import { nanoid } from '@reduxjs/toolkit'
 import { useParams } from "react-router";
 import { selectAndMapPlan, selectPlanById } from "./userPlanSlice";
 import { getCurrentUsersPlans } from "./planFetches";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import RootRef from "@material-ui/core/RootRef";
+import { DragDropContext } from 'react-beautiful-dnd'
 //MATERIAL-UI
-
+import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import GridListTile from '@material-ui/core/GridListTile';
-import Avatar from '@material-ui/core/Avatar';
-import ListItem from '@material-ui/core/ListItem';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemText from '@material-ui/core/ListItemText';   
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    flexDirection: 'row',
   },
   list: {
-    flexGrow: 1,
-    background: 'red',
-    maxWidth: 300,
-    margin: '8px',
+    justify: 'flex-end', 
+    maxHeight: 300,
+    overflow: 'auto',
+    overflowY: 'scroll',
+    marginBottom: '8px',
   },
-  dropZone: {
-    background: 'gray',
-    minHeight: 300,
-  },
-  draggingOver: {
-    background: 'blue',
-    minHeight: 300,
-  },
-  listItem: {
-    marginBottom: '5px',
-    padding: '8px',
-    backgroundColor: theme.palette.background.paper,
-  }, 
-  isDragging: {
-    marginBottom: '5px',
-    padding: '8px',
-    backgroundColor: 'green',
-  }
+
 }));
 
 const PlanShow = () => {
@@ -129,12 +100,13 @@ const PlanShow = () => {
     );
     }
 
-    const handleDelete = (meal, column) => {
-    let filteredColumn = column.meals.filter(key => key !== meal.id.toString())
+  const handleDelete = (id, column) => {
+      
+    let filteredColumn = column.meals.filter(key => key !== id.toString())
     let newColumn = Object.assign({}, column)
     newColumn.meals = filteredColumn
     const filteredRecipes = Object.keys(recipes)
-      .filter(key => key !== meal.id.toString())
+      .filter(key => key !== id.toString())
       .reduce((obj, key) => {
         return {
        ...obj,
@@ -147,9 +119,6 @@ const PlanShow = () => {
     
     setRecipes(filteredRecipes); 
     setColumns({ ...columns, [column.id]: newColumn });
-    
-    // dispatch(deleteFromColumn());
-
     };
   
   const onDragEnd = (result) => {
@@ -212,7 +181,11 @@ const PlanShow = () => {
 
   let content;
   if (status === "loading") {
-    content = <div> Loading...</div>;
+    content = (
+      <section>
+        <LinearProgress />
+      </section>
+    );
   } else if (status === "succeeded" && columns.columnOrder !== undefined) {
     content = (
       <DragDropContext
@@ -222,56 +195,19 @@ const PlanShow = () => {
           const column = columns[columnId];
           const meals = column.meals.map(el => recipes[el]) || [];
           return (
-            <Droppable droppableId={column.id}>
-              {(provided, snapshot) => (
-                <Grid container spacing={3}>
-                <RootRef rootRef={provided.innerRef}>
-                  <Grid
-                    className={classes.list}
-                    {...provided.droppableProps}
-                    key={nanoid()}
-                    aria-label="contacts"
-                  >
-                    <div className={snapshot.isDraggingOver ? classes.draggingOver : classes.dropZone}>
-                    <ListSubheader>{column.id}</ListSubheader>
-                      {meals.map((meal, index) => {
-                        const { title, main_img, id } = meal
-                        const regex = new RegExp("webp*");
-                        const imgTest = regex.test(main_img);
-                        const img = imgTest ? main_img : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png";
-                        return (
-                          <Draggable key={id} draggableId={id.toString()} index={index}>
-                            {(provided, snapshot) => (
-                              <RootRef rootRef={provided.innerRef}>
-                                < GridListTile
-                                  className={snapshot.isDragging ? classes.isDragging : classes.listItem}
-                                  ContainerComponent="li"
-                                  ContainerProps={{ ref: provided.innerRef }}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <ListItemAvatar>
-                                    <Avatar
-                                      alt={title}
-                                      src={img}
-                                    />
-                                  </ListItemAvatar>
-                                  <ListItemText id={id} primary={title} />
-                                </GridListTile>
-                              </RootRef>
-                          
-                            )}
-                          </Draggable>
-                        )
-                      })}
-                    </div>
-                    {provided.placeholder}
-                  </Grid>
-                  </RootRef>
-                </Grid>
-              )}
-            </Droppable>
-          
+
+            <Grid
+              item
+              md={3}
+              sm={6}
+              xs={12}
+              key={nanoid()}
+              className={classes.list}
+            >
+              <Paper  elevation={3} variant="outlined" square >
+                <Column delete={handleDelete} column={column} meals={meals} />
+              </Paper>
+            </Grid>
           )
         })}
     </DragDropContext>
@@ -281,10 +217,14 @@ const PlanShow = () => {
   }
 
   return (
-    <Grid container className={classes.root} spacing={2}>
-      {content}
-    </Grid>
-      
+    <>
+      <h1>{plan.title}</h1>
+        <div className={classes.root} >
+          <Grid justify="space-evenly" container spacing={2}>
+            {content}
+          </Grid>
+        </div>
+    </>
     )
 };
 

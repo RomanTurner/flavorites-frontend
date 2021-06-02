@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getCurrentUsersPlans, addRecipeToPlan } from "../user-plans/planFetches";
 import { nanoid } from "@reduxjs/toolkit"
-
+import { useSnackbar } from 'notistack';
 //MATERIAL UI
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -44,7 +44,7 @@ const RenderRecipe = ({ recipe }) => {
  const img = imgTest
    ? main_img
    : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png"; 
- 
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -76,7 +76,10 @@ const RenderRecipe = ({ recipe }) => {
 
     dispatch(addRecipeToPlan(body))
       .then(unwrapResult)
-      .then(({id}) => history.push(`/user_plans/${id}`) )//originalPromiseResult 
+      .then(({ id }) => {
+        enqueueSnackbar('Recipe Added!', {variant:'success'});
+        history.push(`/user_plans/${id}`)
+      })//originalPromiseResult
       .catch((error) => console.error("error: ", error)); //rejectedValueOrSerializedError
   };
 
@@ -92,6 +95,7 @@ const RenderRecipe = ({ recipe }) => {
             value={value}
             onChange={handleChange}
             label='Age'
+            required
           >
             {plans.map((p) => (
               <MenuItem key={nanoid()} value={p.id}>

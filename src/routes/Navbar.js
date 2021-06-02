@@ -18,12 +18,14 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    background: "#375E83",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
+    backgroundColor: "#F4F9FE",
     width: drawerWidth,
   },
   drawerContainer: {
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-  }
+  },
 }));
 
 export default function ClippedDrawer({children}) {

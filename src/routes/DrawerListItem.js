@@ -18,13 +18,16 @@ import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    marginBottom: "8px",
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
-  nested: {
+  li: {
+    backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing(4),
-  },
+    "&:hover": { backgroundColor: "#F1C8AB" },
+  }
 }));
 
 
@@ -56,11 +59,11 @@ export default function DrawerListItem() {
   const nestedListItems = stuff.map((item) => {
     return (
       <ListItem
+        className={classes.li}
         key={nanoid()}
         button
         to={item.path}
         component={Link}
-        className={classes.nested}
       >
         <ListItemIcon>
           <item.icon />
@@ -81,7 +84,9 @@ export default function DrawerListItem() {
       }
       className={classes.root}
     >
-      <ListItem button onClick={handleClick}>
+      <ListItem
+        className={classes.li}
+        button onClick={handleClick}>
         <ListItemIcon>
           <InboxIcon />
         </ListItemIcon>
