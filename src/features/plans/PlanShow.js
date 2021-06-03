@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import {nanoid} from "@reduxjs/toolkit"
+import React, { useEffect } from "react";
 import { useParams } from "react-router";
-import { selectPlanById, fetchPlans } from "./plansSlice";
 import RecipeExcerpt from "../recipes/RecipeExcerpt";
+import Typography from "@material-ui/core/Typography";
+import { useSelector, useDispatch } from "react-redux";
+import { selectPlanById, fetchPlans } from "./plansSlice";
+//MATERIAL UI
 
+import Grid from "@material-ui/core/Grid";
 const PlanShow = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -26,9 +29,9 @@ const PlanShow = () => {
     content = <div> Loading...</div>;
   } else if (plansStatus === "succeeded") {
     content = plan.meal_plan_recipes.map((recipe) => (
-      <div key={nanoid()}>
+      <Grid key={nanoid()} item xs={12} sm={6} md={3}>
         <RecipeExcerpt key={nanoid()} {...recipe} />
-      </div>
+      </Grid>
     ));
   } else if (plansStatus === "error") {
     content = <div>{error}</div>;
@@ -42,10 +45,25 @@ const PlanShow = () => {
     );
   }
   return (
-    <>
-      <h2>{plan.title}</h2>
-      {content}
-    </>
+    <div style={{ paddingTop: "10px" }}>
+      <Typography
+        style={{
+          textAlign: 'center',
+          margin: '10px',
+          backgroundColor: "#F1C8AB",
+          paddingTop: "10px",
+          paddingBottom: "10px",
+        }}
+        variant='h3'
+        color='primary'
+        component='h3'
+      >
+        {plan.title}
+      </Typography>
+      <Grid container spacing={3}>
+        {content}
+      </Grid>
+    </div>
   );
 };
 

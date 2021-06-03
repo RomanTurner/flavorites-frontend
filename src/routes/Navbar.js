@@ -77,7 +77,7 @@ export default function ClippedDrawer({children}) {
             aria-haspopup='true'
             onClick={handleClick}
           >
-            <MoreVertIcon />
+            <MoreVertIcon fontSize='large' />
           </IconButton>
           <Menu
             id='long-menu'

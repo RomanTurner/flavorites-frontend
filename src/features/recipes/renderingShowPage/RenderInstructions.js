@@ -69,15 +69,17 @@ const RenderInstructions = ({ instructions, instruction_imgs }) => {
   const instructionImage =instruction_imgs.length === 0 ? img : instruction_imgs[i];
     
   const evenSide = (
-      <TimelineOppositeContent>
-        <Paper elevation={3} className={classes.paper}>
-          <Typography variant='h5' component='h5'>
-            {`Step ${i + 1}`}
-          </Typography>
-          <Typography>{instructions[i]}</Typography>
-        </Paper>
-      </TimelineOppositeContent>
-    );
+    <TimelineOppositeContent>
+      <Paper elevation={3} className={classes.paper}>
+        <Typography variant='h3' component='h2'>
+          {`Step ${i + 1}`}
+        </Typography>
+        <Typography variant='h6' component='body'>
+          {instructions[i]}
+        </Typography>
+      </Paper>
+    </TimelineOppositeContent>
+  );
 
   const oddSide =(
       <TimelineContent>
