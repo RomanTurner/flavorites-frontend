@@ -1,39 +1,49 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import {nanoid} from "@reduxjs/toolkit"
+import React, { useState } from "react";
+import { nanoid } from "@reduxjs/toolkit";
+import { useLocation } from "react-router-dom";
+import AddRecipeSelect from "./AddRecipeSelect";
 //MATERIAL UI
-import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
 import Collapse from "@material-ui/core/Collapse";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import ExpandLess from "@material-ui/icons/ExpandLess";
+import ListItem from "@material-ui/core/ListItem";
+import { makeStyles } from "@material-ui/core/styles";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import KitchenOutlinedIcon from "@material-ui/icons/KitchenOutlined";
 import RestaurantOutlinedIcon from "@material-ui/icons/RestaurantOutlined";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: "8px",
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
   li: {
+    marginBottom: "8px",
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing(4),
     "&:hover": { backgroundColor: "#F1C8AB" },
-  }
+  },
 }));
 
-
 export default function DrawerListItem() {
+  const location = useLocation();
   const classes = useStyles();
   const [open, setOpen] = useState(true);
+  const path = location.pathname;
+  
+  //conditionally renders select on drawer when on recipe/show page
+  const onRecipePage =
+    path.split("/")[2] !== undefined && path.split("/")[1] === "recipes";
+
   const handleClick = () => {
     setOpen(!open);
   };
@@ -53,51 +63,65 @@ export default function DrawerListItem() {
       path: "/dashboard",
       text: "Dashboard",
       icon: DashboardOutlinedIcon,
-    },
+    }
   ];
 
   const nestedListItems = stuff.map((item) => {
     return (
-      <ListItem
-        className={classes.li}
-        key={nanoid()}
-        button
-        to={item.path}
-        component={Link}
-      >
-        <ListItemIcon>
-          <item.icon />
-        </ListItemIcon>
-        <ListItemText primary={item.text} />
-      </ListItem>
+      <>
+        <Divider />
+        <ListItem
+          className={classes.li}
+          style={
+            path === item.path
+              ? { backgroundColor: "#F1C8AB" }
+              : { backgroundColor: "theme.palette.background.paper" }
+          }
+          key={nanoid()}
+          button
+          to={item.path}
+          component={Link}
+        >
+          <ListItemAvatar>
+            <Avatar style={{ backgroundColor: "#375E83" }}>
+              <item.icon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={item.text} />
+        </ListItem>
+        <Divider />
+      </>
     );
   });
 
   return (
-    <List
-      component='nav'
-      aria-labelledby='nested-list-subheader'
-      subheader={
-        <ListSubheader component='div' id='nested-list-subheader'>
-          Nested List Items
-        </ListSubheader>
-      }
-      className={classes.root}
-    >
-      <ListItem
-        className={classes.li}
-        button onClick={handleClick}>
-        <ListItemIcon>
-          <InboxIcon />
-        </ListItemIcon>
-        <ListItemText primary='Inbox' />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout='auto' unmountOnExit>
-        <List component='div' disablePadding>
-          {nestedListItems}
-        </List>
-      </Collapse>
-    </List>
+    <>
+      <List
+        component='nav'
+        aria-labelledby='nested-list-subheader'
+        subheader={
+          <ListSubheader component='div' id='nested-list-subheader'>
+            recipes from the Spruce Eats
+          </ListSubheader>
+        }
+        className={classes.root}
+      >
+        <ListItem className={classes.li} button onClick={handleClick}>
+          <ListItemAvatar>
+            <Avatar style={{ backgroundColor: "#375E83" }}>
+              <MenuBookIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary='Menu' />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={open} timeout='auto' unmountOnExit>
+          <List component='div' disablePadding>
+            {nestedListItems}
+          </List>
+        </Collapse>
+      </List>
+      <List>{onRecipePage && <AddRecipeSelect />}</List>
+    </>
   );
 }

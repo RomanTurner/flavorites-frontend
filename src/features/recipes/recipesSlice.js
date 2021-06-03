@@ -64,7 +64,6 @@ export const searchRecipes = createAsyncThunk(
         Authorization: `bearer ${localStorage.getItem("jwt")}`,
       },
     };
-
     const searchURL = `${url}_search/?search=${searchTerm}`;
     const response = await fetch(searchURL, configObj);
     return response.json();

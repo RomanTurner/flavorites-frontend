@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { fetchRecipe } from "./recipesSlice";
 import { fetchPlans } from "../plans/plansSlice";
-import RenderRecipe from "./RenderRecipe";
+import RenderRecipe from "./renderingShowPage/RenderRecipe";
 
 const RecipeShow = () => {
   const { id } = useParams();

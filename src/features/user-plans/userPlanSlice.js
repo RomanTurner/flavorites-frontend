@@ -5,14 +5,16 @@ import {
   addRecipeToPlan,
   deletePlan,
   deleteRecipeFromMealPlan,
+  updatePlan,
 } from "./planFetches";
 
 const initialState = {
   plans: [],
   status: "idle",
   addRecipeToMealPlanStatus: "idle",
-  createMealPlanStatus: "idle",
   deleteMealPlanStatus: "idle",
+  createMealPlanStatus: "idle",
+  updatePlanStatus: "idle",
   deleteRecipeStatus: "idle",
   error: null,
 };
@@ -59,6 +61,7 @@ export const userPlansSlice = createSlice({
       state.addRecipeToMealPlanStatus = "failed";
       state.error = action.error.message;
     },
+    //todo: get rid of?
     //Deletes Recipe from a Meal Plan
     [deleteRecipeFromMealPlan.pending]: (state, action) => {
       state.deleteRecipeStatus = "loading";
@@ -95,6 +98,19 @@ export const userPlansSlice = createSlice({
     },
     [deletePlan.rejected]: (state, action) => {
       state.deleteMealPlanStatus = "failed";
+      state.error = action.error.message;
+    },
+    //Update Meal Plan
+    [updatePlan.pending]: (state) => {
+      state.updatePlanStatus = "loading";
+    },
+    [updatePlan.fulfilled]: (state, action) => {
+      state.updatePlanStatus = "Success";
+      const newPlans = state.plans.filter((plan) => plan.id !== action.payload.id)
+      state.plans = [...newPlans, action.payload]
+    },
+    [updatePlan.rejected]: (state, action) => {
+      state.updatePlanStatus = "failed";
       state.error = action.error.message;
     },
   },

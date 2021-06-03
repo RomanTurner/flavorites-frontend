@@ -1,16 +1,18 @@
 import Column from './Column'
-import { nanoid } from '@reduxjs/toolkit'
+import { useSnackbar } from 'notistack';
+import { nanoid } from '@reduxjs/toolkit';
 import { useParams } from "react-router";
-import { selectAndMapPlan, selectPlanById } from "./userPlanSlice";
-import { getCurrentUsersPlans } from "./planFetches";
-import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from 'react-beautiful-dnd'
+import { useSelector, useDispatch } from "react-redux";
+import { getCurrentUsersPlans, updatePlan } from "./planFetches";
+import { selectAndMapPlan, selectPlanById } from "./userPlanSlice";
+
 //MATERIAL-UI
-import Paper from '@material-ui/core/Paper';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlanShow = () => {
-
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -114,23 +116,21 @@ const PlanShow = () => {
       };
       }, {});
     
-      // console.log(column);
-      // console.log(newColumn);
-    
     setRecipes(filteredRecipes); 
     setColumns({ ...columns, [column.id]: newColumn });
     };
   
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log(draggableId)
+
     if (!destination) {
       return;
     };
+
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) { return; };
+    ) { return;};
 
 
     // Moving in the same list
@@ -216,9 +216,24 @@ const PlanShow = () => {
     content = <div>{error}</div>;
   }
 
+  const handleSave = () => {
+    const body = Object.keys(columns)
+      .reduce((obj, key) => {
+        return {
+       ...obj,
+        [key]: columns[key].meals
+      };
+      }, {});
+    delete body.columnOrder;
+
+    dispatch(updatePlan({ body: body, id: id }))
+
+    enqueueSnackbar('Meal Plan Saved!', {variant:'success'});
+  }
+
   return (
     <>
-      <h1>{plan.title}</h1>
+      <h1>{plan.title}</h1><button onClick={handleSave}>Save</button>
         <div className={classes.root} >
           <Grid justify="space-evenly" container spacing={2}>
             {content}

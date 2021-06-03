@@ -9,7 +9,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Pagination from "@material-ui/lab/Pagination";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,7 +51,7 @@ const RecipesIndex = () => {
 
   let content = recipes.map((recipe) => (
     <Grid key={nanoid()} item xs={12} sm={6} md={3}>
-      <RecipeExcerpt key={nanoid()} {...recipe} />
+     <RecipeExcerpt key={nanoid()} {...recipe} />
     </Grid>
   ));
 
@@ -92,7 +91,7 @@ const RecipesIndex = () => {
         }}
         variant='filled'
         />
-        <Button variant="outlined">Submit</Button>
+        {/* <Button variant="outlined">Submit</Button> */}
         </form>
     </div>
   );

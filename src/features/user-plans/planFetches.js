@@ -56,6 +56,24 @@ export const addRecipeToPlan = createAsyncThunk(
   }
 );
 
+//Update to current user Meal Plan
+export const updatePlan = createAsyncThunk(
+  "userPlans/updatePlan",
+  async ({body, id}) => {
+    const configObj = {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `bearer ${localStorage.getItem("jwt")}`,
+      },
+      body: JSON.stringify(body),
+    };
+    
+    const response = await fetch(PLANS_URL + id , configObj);
+    return response.json();
+  }
+);
+
 
 //Delete plan
 export const deletePlan = createAsyncThunk("userPlans/deletePlans", async (id) => {
