@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
   },
   paper: {
-    padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
 
@@ -119,7 +118,12 @@ const RenderRecipe = ({ recipe }) => {
         </Grid>
         <Paper>
           <Grid container>
-            <Grid item xs={12} md={6} className={classes.container}>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              className={classes.container}
+            >
               <Paper>
                 <Typography
                   style={{ backgroundColor: "#F1C8AB" }}

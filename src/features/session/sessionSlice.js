@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const SESH_URL = "http://localhost:3000/sessions/";
+const USER_URL = "http://localhost:3000/users";
 
 const initialState = {
   user: {},
@@ -8,8 +9,25 @@ const initialState = {
   following: [],
   loggedIn: !!window.localStorage.getItem("jwt"),
   status: "idle",
+  planStatus: "idle",
   error: null,
 };
+
+//Handles SignUp
+export const signUpFetch = createAsyncThunk(
+  "users/signUpFetch",
+  async ({ username, password }) => {
+    const configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: { username, password } }),
+    };
+    const response = await fetch(USER_URL, configObj);
+    return response.json();
+  }
+);
 
 //Handles Login
 export const fetchLogin = createAsyncThunk(
@@ -26,6 +44,7 @@ export const fetchLogin = createAsyncThunk(
     return response.json();
   }
 );
+
 
 export const fetchSession = createAsyncThunk("session/fetchSession", async () => {
   const configObj = {
@@ -55,6 +74,18 @@ export const sessionSlice = createSlice({
     },
   },
   extraReducers: {
+    [signUpFetch.pending]: (state) => {
+      state.status = "loading";
+    },
+    [signUpFetch.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.loggedIn = true;
+      localStorage.setItem("jwt", action.payload.jwt);
+    },
+    [signUpFetch.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    },
     [fetchLogin.pending]: (state) => {
       state.status = "loading";
     },
@@ -87,7 +118,6 @@ export const sessionSlice = createSlice({
     },
   },
 }); 
-
 
 
 export const { signOut } = sessionSlice.actions;

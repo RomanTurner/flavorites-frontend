@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
+import { signUpFetch } from "../features/session/sessionSlice";
 
 //MATERIAL UI
 import Box from "@material-ui/core/Box";
@@ -12,7 +13,6 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { fetchLogin } from "../features/session/sessionSlice";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 function Copyright() {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function SignUp() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const classes = useStyles();
@@ -66,7 +66,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(fetchLogin({ username, password }));
+      await dispatch(signUpFetch({ username, password }));
       setPagination();
       history.push("/dashboard");
     } catch (err) {
@@ -85,7 +85,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Log in
+          Sign Up!
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -114,20 +114,20 @@ export default function Login() {
             type='submit'
             fullWidth
             variant='contained'
-            color='primary'
+            color='secondary'
             className={classes.submit}
             onClick={(e) => handleLogin(e)}
           >
-            Log In
+            Sign up
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/signup" variant='body2'>
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
+        <Grid container>
+          <Grid item>
+            <Link to='/login' variant='body2'>
+              {"Already have an account? Login!"}
+            </Link>
+          </Grid>
+        </Grid>
       </div>
       <Box mt={8}>
         <Copyright />

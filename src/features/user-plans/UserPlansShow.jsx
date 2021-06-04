@@ -11,9 +11,10 @@ import { selectAndMapPlan, selectPlanById } from "./userPlanSlice";
 //MATERIAL-UI
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Button from "@material-ui/core/Button";
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from "@material-ui/core/Typography";
 import LinearProgress from '@material-ui/core/LinearProgress';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,17 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     marginBottom: '8px',
   },
+  header: {
+    width: '100%',
+    textAlign: "center",
+    marginTop: "20px",
+    paddingTop: "20px",
+    paddingBottom: "10px",
+  },
+    saveButton: {
+    alignItems: "center",
+    margin: "20px",
+  }
 
 }));
 
@@ -44,6 +56,18 @@ const PlanShow = () => {
   const [recipes, setRecipes] = useState({}); 
   const [columns, setColumns] = useState({}); 
 
+  const reminder = () => {
+    console.log('reminder')
+    enqueueSnackbar('Remember to Save! ', { variant: 'warning' })
+  };
+
+  
+    useEffect(() => {
+      const timerId = setInterval(reminder, 30000);
+      return () => {
+        clearInterval(timerId);
+      };
+    },[]);
 
     useEffect(() => {
         if (status === "idle") {
@@ -91,6 +115,8 @@ const PlanShow = () => {
         setRecipes(mappedPlan)
         setColumns(defaultColumns)
       }
+      enqueueSnackbar('Remember to Save! ', { variant: 'warning' });
+      
     }, [status]);
       
     
@@ -176,7 +202,7 @@ const PlanShow = () => {
       [newStart.id]: newStart,
       [newFinish.id]: newFinish,
     });
-
+    
   }
 
   let content;
@@ -228,12 +254,28 @@ const PlanShow = () => {
 
     dispatch(updatePlan({ body: body, id: id }))
 
-    enqueueSnackbar('Meal Plan Saved!', {variant:'success'});
+    enqueueSnackbar('Meal Plan Saved!', { variant: 'success' });
+    
   }
 
   return (
     <>
-      <h1>{plan.title}</h1><button onClick={handleSave}>Save</button>
+      <Typography
+        className={classes.header}
+        variant='h3'
+        color='black'
+        component='h3'
+      >
+        Recipes
+      </Typography>
+      <div className={classes.saveButton}>
+        <Button
+        fullWidth
+        variant="contained"
+        color="secondary"
+        onClick={handleSave}
+      > Save </Button>
+      </div>
         <div className={classes.root} >
           <Grid justify="space-evenly" container spacing={2}>
             {content}

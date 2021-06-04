@@ -3,15 +3,17 @@ import React, { useEffect } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import { selectAllPlans } from "./plansSlice";
 import { fetchPlans } from "../plans/plansSlice";
+
 //MATERIAL UI
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: "#F4F9FE", 
+    backgroundColor: "#F4F9FE",
   },
   paper: {
     height: 140,
@@ -20,9 +22,18 @@ const useStyles = makeStyles((theme) => ({
   control: {
     padding: theme.spacing(2),
   },
+  loading: {
+    paddingTop: "100px",
+  },
+  heading: {
+    justifyContent: "center",
+    alignText: "center",
+    alignItems: "center",
+    display: "flex",
+    paddingTop: "25px",
+    paddingBottom: "25px",
+  },
 }));
-
-
 
 const PlansIndex = () => {
   const dispatch = useDispatch();
@@ -30,7 +41,8 @@ const PlansIndex = () => {
   const plans = useSelector(selectAllPlans);
   const status = useSelector((state) => state.plans.status);
   const error = useSelector((state) => state.plans.error);
-
+  const filteredPlans = plans.filter((plan) => plan.meal_plan_recipes.length !== 0)
+  
   useEffect(() => {
    if (status === "idle") {
       dispatch(fetchPlans());
@@ -39,9 +51,13 @@ const PlansIndex = () => {
 
   let content;
   if (status === "loading") {
-    content = <div> Loading...</div>;
+    content = (
+    <div className={classes.loading}>
+        <LinearProgress color='secondary' />
+    </div>
+      );
   } else if (status === "succeeded") {
-    content = plans.map((plan) => <PlanExcerpt key={nanoid()} {...plan} />);
+    content = filteredPlans.map((plan) => <PlanExcerpt key={nanoid()} {...plan} />);
   } else if (status === "failed") {
     content = <div>{error}</div>;
   }
@@ -52,8 +68,7 @@ const PlansIndex = () => {
         style={{
           textAlign: "center",
           margin: "20px",
-          backgroundColor: "#F1C8AB",
-          paddingTop: "10px",
+          paddingTop: "20px",
           paddingBottom: "10px",
         }}
         variant='h3'

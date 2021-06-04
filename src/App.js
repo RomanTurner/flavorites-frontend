@@ -1,38 +1,28 @@
 import React from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
-import { selectLoggedIn } from "./features/session/sessionSlice";
-import { useSelector } from "react-redux";
-import { routes } from "./routes/routes"
-import PrivateRoute from "./routes/PrivateRoutes";
+import SignUp from "./routes/SignUp";
 import Login from "./routes/Login";
+import { routes } from "./routes/routes";
+import PrivateRoute from "./routes/PrivateRoutes";
+import { Route, Switch, useLocation } from "react-router-dom";
+
 
 export default function App() {
   const location = useLocation();
-  const loggedIn = useSelector(selectLoggedIn);
-
+  
+  //creates a permanent token for us to use on refresh/ etc
   const path = location.pathname.split("/")[1];
   const pastPath = sessionStorage.getItem("current");
   sessionStorage.setItem("current", path);
   sessionStorage.setItem("history", pastPath);
- 
-  //clears
-  const loggingOut = () => {
-    window.localStorage.clear();
-    window.sessionStorage.clear();
-    window.location.reload();
-  };
+
 
   return (
-    <div>
-   
-      {loggedIn ? (
-        <button onClick={() => loggingOut()}>Sign Out</button>
-      ) : (
-        "You are not logged in"
-      )}
       <Switch>
         <Route path='/login'>
           <Login />
+        </Route>
+        <Route path='/signup'>
+          <SignUp />
         </Route>
           {routes.map((route) => {
             return (
@@ -42,7 +32,6 @@ export default function App() {
             );
           })}
       </Switch>
-    </div>
   );
 }
 

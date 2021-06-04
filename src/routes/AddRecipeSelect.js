@@ -19,6 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { useParams } from "react-router";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -103,6 +104,12 @@ const AddRecipeSelect = () => {
   };
 
   return (
+    <>
+      <Typography
+      align='center'
+      >
+      Select A Plan From Here
+    </Typography>
     <form onSubmit={(e) => handleSubmit(e)}>
       <FormControl
         style={{ width: "90%" }}
@@ -113,9 +120,9 @@ const AddRecipeSelect = () => {
         <Select
           labelId='meal-plan-select'
           id='meal-plan-select'
-          value={value}
+            value={value}
+            variant='filled'
           onChange={handleChange}
-          label='Age'
           required
         >
           {plans.map((p) => (
@@ -129,9 +136,10 @@ const AddRecipeSelect = () => {
           variant='outlined' type='submit'>
           Submit
         </Button>
-        <FormHelperText>Some important helper text</FormHelperText>
+        <FormHelperText>You must select one of your meal plans</FormHelperText>
       </FormControl>
-    </form>
+      </form>
+      </>
   );
 };
 

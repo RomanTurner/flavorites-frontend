@@ -30,7 +30,7 @@ export const userPlansSlice = createSlice({
     },
     [createMealPlan.fulfilled]: (state, action) => {
       state.createMealPlanStatus = "succeeded";
-      state.plans.push(action.payload);
+      state.plans = [action.payload, ...state.plans]
     },
     [createMealPlan.rejected]: (state, action) => {
       state.createMealPlanStatus = "failed";

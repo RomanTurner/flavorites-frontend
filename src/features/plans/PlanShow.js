@@ -6,8 +6,11 @@ import Typography from "@material-ui/core/Typography";
 import { useSelector, useDispatch } from "react-redux";
 import { selectPlanById, fetchPlans } from "./plansSlice";
 //MATERIAL UI
-
 import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+
+
 const PlanShow = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -21,12 +24,13 @@ const PlanShow = () => {
     }
   }, [plansStatus, dispatch]);
 
-
-
-
   let content;
   if (plansStatus === "loading") {
-    content = <div> Loading...</div>;
+      content = (
+        <div className={{ paddingTop: "100px" }}>
+          <LinearProgress color='secondary' />
+        </div>
+      );
   } else if (plansStatus === "succeeded") {
     content = plan.meal_plan_recipes.map((recipe) => (
       <Grid key={nanoid()} item xs={12} sm={6} md={3}>
@@ -48,10 +52,10 @@ const PlanShow = () => {
     <div style={{ paddingTop: "10px" }}>
       <Typography
         style={{
-          textAlign: 'center',
-          margin: '10px',
-          backgroundColor: "#F1C8AB",
-          paddingTop: "10px",
+          textAlign: "center",
+          margin: "10px",
+          backgroundColor: "#F4F9FE",
+          paddingTop: "30px",
           paddingBottom: "10px",
         }}
         variant='h3'

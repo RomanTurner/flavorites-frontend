@@ -37,13 +37,12 @@ const useStyles = makeStyles((theme) => ({
 export default function DrawerListItem() {
   const location = useLocation();
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
   const path = location.pathname;
-  
   //conditionally renders select on drawer when on recipe/show page
-  const onRecipePage =
-    path.split("/")[2] !== undefined && path.split("/")[1] === "recipes";
-
+  const onRecipePage =path.split("/")[2] !== undefined && path.split("/")[1] === "recipes";
+  const [open, setOpen] = useState(!onRecipePage);
+  
+ 
   const handleClick = () => {
     setOpen(!open);
   };
@@ -101,7 +100,7 @@ export default function DrawerListItem() {
         aria-labelledby='nested-list-subheader'
         subheader={
           <ListSubheader component='div' id='nested-list-subheader'>
-            recipes from the Spruce Eats
+            SpruceEats Recipes
           </ListSubheader>
         }
         className={classes.root}

@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#F4F9FE",
     minWidth: 275,
     marginBottom: "20px",
+    marginLeft: "8px",
   },
   bullet: {
     display: "inline-block",
@@ -54,7 +55,7 @@ const RenderMetaData = (props) => {
       <Card className={classes.root} variant='outlined'>
         <CardContent >
           <Grid container>
-            <Grid item xs={12} md={6}>
+            <Grid style={{paddingLeft:'40px'}}item xs={12} md={6}>
               <Typography variant='h6' component='h2'>
                 Cook Time {bull} {metadata.cook_time}
               </Typography>

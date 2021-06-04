@@ -12,6 +12,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
 
 const drawerWidth = 240;
 
@@ -47,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     color: "white",
     width: 30,
-    height: 60,
+    height: 40,
   },
 }));
 
@@ -63,6 +66,12 @@ export default function ClippedDrawer({children}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+    const loggingOut = () => {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload();
+    };
 
   return (
     <div className={classes.root}>
@@ -86,7 +95,12 @@ export default function ClippedDrawer({children}) {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem selected={"Pyxis"} onClick={handleClose}></MenuItem>
+            <MenuItem selected={"Pyxis"} onClick={handleClose}>
+              <AccountCircleIcon fontSize='medium' /> Profile{" "}
+            </MenuItem>
+            <MenuItem selected={"Pyxis"} onClick={loggingOut}>
+              <ExitToAppIcon fontSize='large' /> Logout{" "}
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

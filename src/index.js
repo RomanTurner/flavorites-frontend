@@ -6,10 +6,21 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from "notistack";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import './App.css'
+
+const font = "'Varela Round', sans-serif";
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: "Work Sans, sans-serif",
+    fontFamily: font,
+    fontSize: 16,
+    fontWeightExtraLight: 200,
+    fontWeightLight: 300,
+    fontWeightRegular: 500,
+    fontWeightMedium: 500,
+    fontWeightSemiBold: 600,
+    fontWeightBold: 700,
+    fontWeightExtraBold: 800,
   },
   status: {
     success: "#F1C8AB",
@@ -21,7 +32,7 @@ const theme = createMuiTheme({
     secondary: {
       main: "#F1C8AB",
     },
-  }
+  },
 });
 
 

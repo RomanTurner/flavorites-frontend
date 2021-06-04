@@ -1,11 +1,11 @@
-import RecipesIndex from "../features/recipes/RecipeIndex";
-import RecipeShow from "../features/recipes/RecipeShow";
-import PlansIndex from "../features/plans/PlansIndex";
-import PlanShow from "../features/plans/PlanShow";
 import NotFoundPage from "./NotFoundPage";
+import PlanShow from "../features/plans/PlanShow";
+import PlansIndex from "../features/plans/PlansIndex";
 import Dashboard from "../features/session/Dashboard";
-import UserPlansExcerpt from "../features/user-plans/UserPlansExcerpt";
+import RecipeShow from "../features/recipes/RecipeShow";
+import RecipesIndex from "../features/recipes/RecipeIndex";
 import UserPlansShow from "../features/user-plans/UserPlansShow";
+import UserPlansExcerpt from "../features/user-plans/UserPlansExcerpt";
 
 export const routes = [
   {

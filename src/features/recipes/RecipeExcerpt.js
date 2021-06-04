@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 
 
 
-export default function RecipeExcerpt({ title, id, main_img }) {
+const RecipeExcerpt = ({ title, id, main_img }) => {
   const classes = useStyles();
   const status = useSelector((state) => state.recipes.status);
   const error = useSelector((state) => state.recipes.error);
@@ -30,7 +30,9 @@ export default function RecipeExcerpt({ title, id, main_img }) {
   const rating = Math.round((Math.random() * (5 - 3 + 1) + 3) / 0.5) * 0.5;
   const imgTest = regex.test(main_img)
   const img = imgTest ? main_img : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png" 
-  let content; 
+  
+  let content;
+  
   if (status !== "failed") {
     content = (
       <Card className={classes.root}>
@@ -78,3 +80,5 @@ export default function RecipeExcerpt({ title, id, main_img }) {
 
   return content;
 } 
+
+export default React.memo(RecipeExcerpt);

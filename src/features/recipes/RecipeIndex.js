@@ -29,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: "25ch",
   },
+  heading: {
+    backgroundColor: "#F4F9FE",
+    textAlign: "center",
+    margin: "20px",
+    paddingTop: "10px",
+    paddingBottom: "10px",
+  }
 }));
 
 const RecipesIndex = () => {
@@ -62,12 +69,15 @@ const RecipesIndex = () => {
     dispatch(fetchRecipes(value));
   };
 
+
   const pagination = (
     <div className={classes.root}>
       <Pagination
+        defaultPage={+counter}
         onChange={handlePage}
         count={56}
-        variant='outlined' />
+        variant='outlined'
+      />
     </div>
   );
 
@@ -127,14 +137,8 @@ const RecipesIndex = () => {
   return (
     <section className='posts-list'>
       <Typography
-        style={{
-          textAlign: "center",
-          margin: "20px",
-          backgroundColor: "#F1C8AB",
-          paddingTop: "10px",
-          paddingBottom: "10px",
-        }}
-        variant='h3'
+        className={classes.heading}
+        variant='h2'
         color='primary'
         component='h3'
       >
