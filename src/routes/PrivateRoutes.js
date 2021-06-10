@@ -1,8 +1,10 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import Navbar from "../routes/Navbar";
 import { useSelector } from "react-redux";
+import { Redirect, Route } from "react-router-dom";
 import { selectLoggedIn } from "../features/session/sessionSlice";
-import Navbar from "../routes/Navbar"
+
+
 function PrivateRoutes({ children, ...rest }) {
   const loggedIn = useSelector(selectLoggedIn);
   return (

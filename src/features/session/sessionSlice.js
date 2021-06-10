@@ -1,15 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const SESH_URL = "http://localhost:3000/sessions/";
+const USER_URL = "http://localhost:3000/users";
+const jwt = JSON.parse(!!window.localStorage.getItem("jwt"));
+console.log(jwt)
 
 const initialState = {
   user: {},
   followers: [],
   following: [],
-  loggedIn: !!window.localStorage.getItem("jwt"),
+  loggedIn: jwt,
   status: "idle",
+  planStatus: "idle",
   error: null,
 };
+
+//Handles SignUp
+export const signUpFetch = createAsyncThunk(
+  "users/signUpFetch",
+  async ({ username, password }) => {
+    const configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: { username, password } }),
+    };
+    const response = await fetch(USER_URL, configObj);
+    return response.json();
+  }
+);
 
 //Handles Login
 export const fetchLogin = createAsyncThunk(
@@ -27,6 +47,7 @@ export const fetchLogin = createAsyncThunk(
   }
 );
 
+
 export const fetchSession = createAsyncThunk("session/fetchSession", async () => {
   const configObj = {
     method: "GET",
@@ -38,12 +59,7 @@ export const fetchSession = createAsyncThunk("session/fetchSession", async () =>
   const response = await fetch(SESH_URL, configObj);
   return response.json();
 });
-// const addItemToArray = (state, action) => {
-//   state.push(action.payload);
-// };
-// const removeItemToArray = (state, action) => {
-//   state.filter(action.payload);
-// };
+
  
 export const sessionSlice = createSlice({
   name: "session",
@@ -60,6 +76,24 @@ export const sessionSlice = createSlice({
     },
   },
   extraReducers: {
+    [signUpFetch.pending]: (state) => {
+      state.status = "loading";
+    },
+    [signUpFetch.fulfilled]: (state, action) => {
+      if (action.payload.jwt !== undefined) {
+        state.status = "succeeded";
+        state.loggedIn = true;
+        localStorage.setItem("jwt", action.payload.jwt);
+      } else {
+        state.status = "failed";
+        state.loggedIn = false;
+        state.error = action.payload.message;
+      }
+    },
+    [signUpFetch.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    },
     [fetchLogin.pending]: (state) => {
       state.status = "loading";
     },
@@ -92,7 +126,6 @@ export const sessionSlice = createSlice({
     },
   },
 }); 
-
 
 
 export const { signOut } = sessionSlice.actions;

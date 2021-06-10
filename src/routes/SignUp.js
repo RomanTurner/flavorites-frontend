@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory, Link } from "react-router-dom";
+import { signUpFetch } from "../features/session/sessionSlice";
 
 //MATERIAL UI
 import Box from "@material-ui/core/Box";
@@ -12,7 +14,6 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { fetchLogin } from "../features/session/sessionSlice";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 function Copyright() {
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -44,13 +45,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function SignUp() {
+  const [error, isError] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [helperText, setHelperText] = useState('only unique usernames allowed');
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-
   const handleChange = (event, type) => {
     let stateMap = {
       username: (event) => setUsername(event.target.value),
@@ -58,17 +60,26 @@ export default function Login() {
     };
     stateMap[type](event);
   };
-
+  
   const setPagination = () => {
     localStorage.setItem("counter", 0);
   };
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(fetchLogin({ username, password }));
-      setPagination();
-      history.push("/dashboard");
+      const result = await dispatch(signUpFetch({ username, password }));
+      const status = unwrapResult(result);
+      if (status.message === undefined) {
+         setPagination();
+         history.push("/dashboard");
+      } else {
+        console.log(status);
+        isError(true);
+        setHelperText(status.message);
+        setUsername("");
+        setPassword("");
+      }
     } catch (err) {
       console.error("Failed to fetch the user: ", err);
     } finally {
@@ -85,7 +96,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Log in
+          Sign Up!
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -97,6 +108,8 @@ export default function Login() {
             id='username'
             label='Username'
             name='username'
+            error={error}
+            helperText={helperText}
             autoFocus
           />
           <TextField
@@ -114,20 +127,20 @@ export default function Login() {
             type='submit'
             fullWidth
             variant='contained'
-            color='primary'
+            color='secondary'
             className={classes.submit}
             onClick={(e) => handleLogin(e)}
           >
-            Log In
+            Sign up
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/signup" variant='body2'>
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
+        <Grid container>
+          <Grid item>
+            <Link to='/login' variant='body2'>
+              {"Already have an account? Login!"}
+            </Link>
+          </Grid>
+        </Grid>
       </div>
       <Box mt={8}>
         <Copyright />

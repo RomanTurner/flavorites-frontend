@@ -1,10 +1,11 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const url = "http://localhost:3000/recipes"
 
 const initialState = {
   recipes: [],
   status: "idle",
+  searchStatus: "idle",
   soloStatus: "idle",
   error: null,
   counter: localStorage.getItem("counter") || 0,
@@ -64,7 +65,6 @@ export const searchRecipes = createAsyncThunk(
         Authorization: `bearer ${localStorage.getItem("jwt")}`,
       },
     };
-
     const searchURL = `${url}_search/?search=${searchTerm}`;
     const response = await fetch(searchURL, configObj);
     return response.json();
@@ -88,14 +88,17 @@ export const recipesSlice = createSlice({
       state.error = action.error.message;
     },
     [searchRecipes.pending]: (state) => {
-      state.status = "loading";
+      state.searchStatus = "loading";
     },
     [searchRecipes.fulfilled]: (state, action) => {
-      state.status = "succeeded";
+      state.searchStatus = "succeeded";
+      if (action.payload.recipes.length === 0) {
+      state.error = "NO MATCHING RESULTS IN DATABASE"
+      }
       state.recipes = action.payload.recipes
     },
     [searchRecipes.rejected]: (state, action) => {
-      state.status = "failed";
+      state.searchStatus = "failed";
       state.error = action.error.message;
     },
     [fetchRecipe.pending]: (state) => {
