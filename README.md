@@ -72,7 +72,7 @@ When logging in the actions are: storing the jwt in local storage, iniate a coun
 [Session Fetch Code](src/features/session/sessionSlice.js) |
 The intial state of my sessions slice
 
-### Dashboard  <a name="dashboard"></a>
+## Dashboard  <a name="dashboard"></a>
 When you are authorized login or sign-up you are taken to the user dashboard, quiet tasteful if I might say. As a new user you do not have any meal plans but you do have a set of instructions that guide the new user on how to make new meal plans. This can be increased with additional pointers and guides.
 
 ![blank dashboard](src/img/blank-dashboard.png)
@@ -90,7 +90,7 @@ As you follow the instructions you can create a new meal plan.
 
 ![empty plan alert](src/img/empty-plan-alert.png)
 [Dashboard Code](src/features/session/Dashboard.js)
-### Meal Plans  <a name="meal-plans"></a>
+## Meal Plans  <a name="meal-plans"></a>
 
 The initial page for exploring meal plans will hold all of the user's meal plans. Paginating this and creating keyword searches could be easily implemented and are already features for the individual recipe search. 
 
@@ -176,11 +176,99 @@ As I mentioned earlier, everything is composed through a private route component
 {children}
 ```
 is our application. 
-### Meal Plan Edit <a name="auth"></a>
 
+## Recipes  <a name="recipes"></a>
+Alright, now we are back to exploring features. We are now going to add a recipe to our meal plan. We navigated to recipe previews inside of the meal plan container of a user, but we are going to go to the search page and find recipes in this manner. 
 
-### Recipes  <a name="recipes"></a>
 ### Dynamic Database Search <a name="ddbs"></a>
+At the top of the page we have a search bar that encourages a user to search by a keyword in the Title of the recipe. 
+
+![private route](src/img/search-pagination.gif)
+
+[Search Code](src/features/recipes/RecipeIndex.js)
+
+This is doing a dynamic query of the database. Leveraging the citext properties of Rails v6. This also sends back invalid responses that updates the helper text.
+
+![private route](src/img/search-error.gif)
+
+[Search Code](src/features/recipes/RecipeIndex.js)
+
+### Show 
+No matter the navigation path, a recipe excerpt will lead to the recipe render page. That will render many different components that all deal with the individual recipe data: 
+- title
+- metadata
+- tips 
+- ingredients 
+- description 
+- main image
+- instruction, text and image
+
+![private route](src/img/recipe-show.gif)
+
+[Recipe Rendering Code](src/features/recipes/RecipeRender.js)
+
+This is where I had the opprotunity to use multiple components and to give a new interpretation on the data I collected from the Spruce Eats. The clean material components I think really highlight the minimalist theme that showcases the food. One of my 'flavorite' parts is the instruction timeline. I think it turned out really good. 
+
+**Additional Features** Aggrigating the ingredients for a shopping list would be my next feature for the recipes. This would be such a benefit to a meal planning application. 
+
+You can add the recipe to a meal plan by selecting it from the select bar that is on the navigation drawer. A helpful snackbar reminds or alerts us to that. 
 
 
-[^3]: Redux Toolkit and Rails as an API. DUCK directory design and using the files as Rail views has peaked my interest. 
+[^2]: This is the second instance of using the location to conditionally render the component. The recipe page will trigger the navigation drawer to render the select form.  
+
+Having the select form on the navigation drawer is a deliberate design. As you explore the recipe I wanted the user to be able to add the recipe to the meal plan at any point. 
+
+![private route](src/img/add-recipe.gif)
+
+### Meal Plan Edit <a name="auth"></a>
+As soon as you select a recipe you are directed to the edit page for the meal plan. You can also navigate here through the Dashboard. 
+
+![Meal Plan Navigartion](src/img/edit-meal-plan.gif)
+
+You are greeted with a reminder snack bar, persistence happens on save as you can drag and drop items to your heart's content. 
+
+On the dashboard the meal plan preview populates with the images of the recipes it contains. Giving the user a great sneak peak or reminder. 
+
+![Meal Plan Dashboard](src/img/meal-plan-dash.gif)
+
+Here is a demonstration of CRUD actions in the drag and drop editor. 
+
+You can: 
+- change the day
+- change position in the day
+- delete
+- all persistent actions
+
+![Meal Plan Editor](src/img/mp-crud.gif)
+
+[Meal Plan Editor](/src/features/user-plans/UserPlansShow.jsx)
+
+The drag and drop is a complex beast that took me multiple days out of my two-week deadline to implement. I am really pleased with the outcome and welcome you to see how I implemented it with React hook and Material-Ui components. 
+
+I used the React Beautiful dnd npm package to help with my zoning. This did not play well with the Material-Ui componenents naturally as you are refencing DOM elements not virtual DOM elements when you implement a drag and drop feature. I worked around this by digging into the Material-Ui documentation. Feel free to explore the code more. 
+
+### Logout 
+With logging out we have to make sure to rid the token out of local storage and remove the client from the protected routes, otherwise the fetches will not bring back anything and the app will crash. 
+
+With protected routes though if they are no longer logged in they get pushed to the log-in page. My solution for logging out is like so: 
+``` javascript
+
+    const loggingOut = () => {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload();
+    };
+```
+I simply clear the storage and reload the window. Letting the protected routing do the redirecting for me. 
+
+![private route](src/img/log-out.gif)
+
+That concludes my demonstration of the availible features.
+
+**Additional Features** The database is set up to have complex sharing and relationships with each user. I think that this would be a great start for sharing between users. "Flavoriting" and having "Flavor Followers" etc. I would implement that after some meal plan functionality like a shopping list. 
+
+Thank you for stopping by. If you have any notes or questions please feel free to reach out.
+
+
+Footnote: 
+[^3]: Redux Toolkit and Rails as an API. DUCK directory design and using the files as Rail views has peaked my interest. I would love to explore creating a generator where the controllers generate a redux slice. 
