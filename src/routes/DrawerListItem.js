@@ -19,6 +19,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import KitchenOutlinedIcon from "@material-ui/icons/KitchenOutlined";
 import RestaurantOutlinedIcon from "@material-ui/icons/RestaurantOutlined";
 import DashboardOutlinedIcon from "@material-ui/icons/DashboardOutlined";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,20 +35,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function DrawerListItem() {
   const location = useLocation();
   const classes = useStyles();
   const path = location.pathname;
   //conditionally renders select on drawer when on recipe/show page
-  const onRecipePage =path.split("/")[2] !== undefined && path.split("/")[1] === "recipes";
+  const onRecipePage =
+    path.split("/")[2] !== undefined && path.split("/")[1] === "recipes";
   const [open, setOpen] = useState(!onRecipePage);
-  
- 
+
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const stuff = [
+  const menuListItems = [
     {
       path: "/meal_plans",
       text: "Explore Meal Plans",
@@ -62,10 +64,11 @@ export default function DrawerListItem() {
       path: "/dashboard",
       text: "Dashboard",
       icon: DashboardOutlinedIcon,
-    }
+    },
   ];
 
-  const nestedListItems = stuff.map((item) => {
+  //VpnKeyIcon;
+  const nestedListItems = menuListItems.map((item) => {
     return (
       <>
         <Divider />

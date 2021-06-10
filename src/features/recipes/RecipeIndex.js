@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     width: "25ch",
   },
   heading: {
-    backgroundColor: "#F4F9FE",
     textAlign: "center",
     margin: "20px",
     paddingTop: "10px",
