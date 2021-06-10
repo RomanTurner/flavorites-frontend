@@ -41,23 +41,28 @@ const PlansIndex = () => {
   const plans = useSelector(selectAllPlans);
   const status = useSelector((state) => state.plans.status);
   const error = useSelector((state) => state.plans.error);
-  const filteredPlans = plans.filter((plan) => plan.meal_plan_recipes.length !== 0)
-  
+  const filteredPlans = plans.filter(
+    (plan) => plan.meal_plan_recipes.length !== 0
+  );
+
   useEffect(() => {
-   if (status === "idle") {
+    if (status === "idle") {
       dispatch(fetchPlans());
     }
   }, [status, dispatch]);
 
+  //Conditionally renders based off of the fetch status
   let content;
   if (status === "loading") {
     content = (
-    <div className={classes.loading}>
+      <div className={classes.loading}>
         <LinearProgress color='secondary' />
-    </div>
-      );
+      </div>
+    );
   } else if (status === "succeeded") {
-    content = filteredPlans.map((plan) => <PlanExcerpt key={nanoid()} {...plan} />);
+    content = filteredPlans.map((plan) => (
+      <PlanExcerpt key={nanoid()} {...plan} />
+    ));
   } else if (status === "failed") {
     content = <div>{error}</div>;
   }

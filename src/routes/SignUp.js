@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useHistory, Link } from "react-router-dom";
 import { signUpFetch } from "../features/session/sessionSlice";
 
@@ -45,12 +46,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+  const [error, isError] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [helperText, setHelperText] = useState('only unique usernames allowed');
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-
   const handleChange = (event, type) => {
     let stateMap = {
       username: (event) => setUsername(event.target.value),
@@ -58,17 +60,26 @@ export default function SignUp() {
     };
     stateMap[type](event);
   };
-
+  
   const setPagination = () => {
     localStorage.setItem("counter", 0);
   };
-
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(signUpFetch({ username, password }));
-      setPagination();
-      history.push("/dashboard");
+      const result = await dispatch(signUpFetch({ username, password }));
+      const status = unwrapResult(result);
+      if (status.message === undefined) {
+         setPagination();
+         history.push("/dashboard");
+      } else {
+        console.log(status);
+        isError(true);
+        setHelperText(status.message);
+        setUsername("");
+        setPassword("");
+      }
     } catch (err) {
       console.error("Failed to fetch the user: ", err);
     } finally {
@@ -97,6 +108,8 @@ export default function SignUp() {
             id='username'
             label='Username'
             name='username'
+            error={error}
+            helperText={helperText}
             autoFocus
           />
           <TextField

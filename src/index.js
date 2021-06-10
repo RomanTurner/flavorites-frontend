@@ -1,12 +1,12 @@
+import './App.css';
+import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from "notistack";
+import { BrowserRouter as Router } from 'react-router-dom'
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import './App.css'
 
 const font = "'Varela Round', sans-serif";
 

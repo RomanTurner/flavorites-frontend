@@ -10,12 +10,11 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 
-
 const PlanShow = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const plansStatus = useSelector((state) => state.plans.status);
   const error = useSelector((state) => state.plans.error);
+  const plansStatus = useSelector((state) => state.plans.status);
   const plan = useSelector((state) => selectPlanById(state, +id));
 
   useEffect(() => {
@@ -24,6 +23,8 @@ const PlanShow = () => {
     }
   }, [plansStatus, dispatch]);
 
+
+  //Conditionally renders based off of the fetch status
   let content;
   if (plansStatus === "loading") {
       content = (
@@ -41,6 +42,7 @@ const PlanShow = () => {
     content = <div>{error}</div>;
   }
 
+  //If the data is fetching there will be a default on the screen during the initial component mount
   if (!plan) {
     return (
       <section>

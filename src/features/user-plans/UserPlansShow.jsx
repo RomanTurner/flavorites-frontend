@@ -56,18 +56,18 @@ const PlanShow = () => {
   const [recipes, setRecipes] = useState({}); 
   const [columns, setColumns] = useState({}); 
 
-  const reminder = () => {
-    console.log('reminder')
-    enqueueSnackbar('Remember to Save! ', { variant: 'warning' })
-  };
+  // const reminder = () => {
+  //   console.log('reminder')
+  //   enqueueSnackbar('Remember to Save! ', { variant: 'warning' })
+  // };
 
   
-    useEffect(() => {
-      const timerId = setInterval(reminder, 30000);
-      return () => {
-        clearInterval(timerId);
-      };
-    },[]);
+    // useEffect(() => {
+    //   const timerId = setInterval(reminder, 30000);
+    //   return () => {
+    //     clearInterval(timerId);
+    //   };
+    // },[]);
 
     useEffect(() => {
         if (status === "idle") {

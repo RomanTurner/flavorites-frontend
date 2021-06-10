@@ -1,14 +1,14 @@
 import React from 'react'
-import { nanoid } from '@reduxjs/toolkit'
 import ListItems from './ListItems'
+import { nanoid } from '@reduxjs/toolkit'
 import { Droppable } from 'react-beautiful-dnd'
 //MATERIAL UI
+import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
+import RootRef from "@material-ui/core/RootRef";
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import RootRef from "@material-ui/core/RootRef";
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
     root: {

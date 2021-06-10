@@ -85,7 +85,7 @@ export default function PlanExcerpt({title, id, meal_plan_recipes, user, created
         })}
       </GridList>
   );
-
+//Creates the card action area. Author details
   return (
     <Grid
       className={classes.root}

@@ -2,12 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const SESH_URL = "http://localhost:3000/sessions/";
 const USER_URL = "http://localhost:3000/users";
+const jwt = JSON.parse(!!window.localStorage.getItem("jwt"));
+console.log(jwt)
 
 const initialState = {
   user: {},
   followers: [],
   following: [],
-  loggedIn: !!window.localStorage.getItem("jwt"),
+  loggedIn: jwt,
   status: "idle",
   planStatus: "idle",
   error: null,
@@ -78,9 +80,15 @@ export const sessionSlice = createSlice({
       state.status = "loading";
     },
     [signUpFetch.fulfilled]: (state, action) => {
-      state.status = "succeeded";
-      state.loggedIn = true;
-      localStorage.setItem("jwt", action.payload.jwt);
+      if (action.payload.jwt !== undefined) {
+        state.status = "succeeded";
+        state.loggedIn = true;
+        localStorage.setItem("jwt", action.payload.jwt);
+      } else {
+        state.status = "failed";
+        state.loggedIn = false;
+        state.error = action.payload.message;
+      }
     },
     [signUpFetch.rejected]: (state, action) => {
       state.status = "failed";

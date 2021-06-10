@@ -6,9 +6,9 @@ import RenderInstructions from './RenderInstructions'
 
 //MATERIAL UI
 import { Grid, Paper } from '@material-ui/core';
+import Timeline from "@material-ui/lab/Timeline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Timeline from "@material-ui/lab/Timeline";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,16 +72,15 @@ const RenderRecipe = ({ recipe }) => {
     instruction_imgs,
     tips,
   } = recipe;
+  const classes = useStyles();
 
-  console.log("tips:", tips)
+  //sanitizes the authors images out of the excerpt
+  const regex = new RegExp("webp*");
+  const imgTest = regex.test(main_img);
+  const img = imgTest
+    ? main_img
+    : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png";
 
- const classes = useStyles();
- const regex = new RegExp("webp*");
- const imgTest = regex.test(main_img);
- const img = imgTest
-   ? main_img
-   : "https://www.thespruceeats.com/thmb/1CjAC8Zr29zcoXNHtq5DgJ45lYs=/1001x1001/filters:fill(auto,1)/SPRE_SocialImage-no-transparency-5ad5fc0bc5542e00362c0baa.png"; 
-  
   return (
     <section className={classes.root}>
       <Grid className={classes.container}>
@@ -118,12 +117,7 @@ const RenderRecipe = ({ recipe }) => {
         </Grid>
         <Paper>
           <Grid container>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              className={classes.container}
-            >
+            <Grid item xs={12} md={6} className={classes.container}>
               <Paper>
                 <Typography
                   style={{ backgroundColor: "#F1C8AB" }}

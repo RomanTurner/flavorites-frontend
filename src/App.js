@@ -15,7 +15,6 @@ export default function App() {
   sessionStorage.setItem("current", path);
   sessionStorage.setItem("history", pastPath);
 
-
   return (
       <Switch>
         <Route path='/login'>

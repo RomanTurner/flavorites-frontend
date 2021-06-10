@@ -42,28 +42,31 @@ const RecipesIndex = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const recipes = useSelector(selectAllRecipes);
-  const recipesStatus = useSelector((state) => state.recipes.status);
   const error = useSelector((state) => state.recipes.error);
+  const recipesStatus = useSelector((state) => state.recipes.status);
+  
+  
+  //set pagination based on location -is persistant
   const counter = localStorage.getItem("counter");
-
   const [search, setSearch] = useState('');
-
-   const handleChange = (event) => {
-     setSearch(event.target.value);
-   };
-    
+  
   useEffect(() => {
     if (recipesStatus === "idle") {
       dispatch(fetchRecipes(counter));
     }
   }, [recipesStatus, dispatch, counter]);
 
+  //controlled form
+   const handleChange = (event) => {
+     setSearch(event.target.value);
+   };
+    
+
   let content = recipes.map((recipe) => (
     <Grid key={nanoid()} item xs={12} sm={6} md={3}>
      <RecipeExcerpt key={nanoid()} {...recipe} />
     </Grid>
   ));
-
 
   const handlePage = (e, value) => {
     dispatch(fetchRecipes(value));

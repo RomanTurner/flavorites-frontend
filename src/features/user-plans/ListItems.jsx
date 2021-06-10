@@ -1,13 +1,13 @@
 import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 //MATERIAL UI
+import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import RootRef from "@material-ui/core/RootRef";
 import ListItem from '@material-ui/core/ListItem';
+import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItemText from '@material-ui/core/ListItemText';   
-import RootRef from "@material-ui/core/RootRef";
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
