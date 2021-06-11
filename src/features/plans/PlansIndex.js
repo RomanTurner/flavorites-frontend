@@ -13,7 +13,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: "#F4F9FE",
+   
   },
   paper: {
     height: 140,
