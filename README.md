@@ -78,14 +78,17 @@ When logging in the actions are: storing the jwt in local storage, iniate a coun
 The intial state of my sessions slice
 
 ## Dashboard  <a name="dashboard"></a>
+
 When you are authorized login or sign-up you are taken to the user dashboard, quiet tasteful if I might say. As a new user you do not have any meal plans but you do have a set of instructions that guide the new user on how to make new meal plans. This can be increased with additional pointers and guides.
 
 ![blank dashboard](src/img/blank-dashboard.png)
+
 [Dashboard Code](src/features/session/Dashboard.js)
+
 >I do enjoy the minimalist timeline feel though. 
 
-
 As you follow the instructions you can create a new meal plan. 
+
 ![new meal plan](src/img/new-meal-plan.gif)
 
 [Dashboard Code](src/features/session/Dashboard.js)
@@ -94,7 +97,9 @@ As you follow the instructions you can create a new meal plan.
 
 
 ![empty plan alert](src/img/empty-plan-alert.png)
+
 [Dashboard Code](src/features/session/Dashboard.js)
+
 ## Meal Plans  <a name="meal-plans"></a>
 
 The initial page for exploring meal plans will hold all of the user's meal plans. Paginating this and creating keyword searches could be easily implemented and are already features for the individual recipe search. 
@@ -138,12 +143,15 @@ This will allow me to create a private route by simply adding a component and ro
 This allows my app file to remain simple, rendering an easy to read router. 
 
 ![app routes](src/img/app-router.png)
+
 [App Code](src/features/routes/app.js)
 
 This is where the magic happens though. We use the private route as a component that composes routes for us. This also lends us the opprotunity to render all of our componenets as children of the navbar which means the page content will be in the correct spot with our permanent drawer and toolbar. 
 
 ![private route](src/img/private-route.png)
+
 [Private Route Code](src/features/routes/PrivateRoutes.js)
+
 >Double composition with a conditional render. Doesn't get more React than that. 
 
 ### Navigation <a name="navigation"></a>
@@ -152,6 +160,7 @@ I again leverage compositon to help create menu list items that are link compone
 
 
 ![private route](src/img/menu-list-obj.png)
+
 [Menu List Icon Code](src/features/routes/DrawListItem.js)
 
 First we compose the object to hold all of the information that we want to be mapped over. This list holds the path, the text for the menu list item, and the icon that we want displayed. 
@@ -160,10 +169,12 @@ First we compose the object to hold all of the information that we want to be ma
 We map over the Material-Ui components and you can notice a couple things. A conditional background color rendering based on the location of the page. 
 
 [^1]: This is set with the location we are storing in sessions. 
+
 ![private route](src/img/menu-list-items.png)
 
 
 The background will reflect the active page. 
+
 ![private route](src/img/menu-list-hover.gif)
 
 
@@ -177,6 +188,7 @@ Here is adding a functional drawer menu list item with a working route and css h
 As I mentioned earlier, everything is composed through a private route component and inside of that component it is wrapped in my Navbar. 
 
 ![private route](src/img/navbar.png)
+
 [Navbar Code](src/features/routes/Navbar.js)
 ``` javascript
 {children}
