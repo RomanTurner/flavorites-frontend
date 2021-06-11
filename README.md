@@ -1,9 +1,9 @@
-# Flavorites, the Pine Meal Planner
+# Flavorites: the Pine Meal Planner 🌲
 
 Thank you for spending the time on checking out this project. It really is a labor of love, and if you have any code review or notes I would enjoy talking about them or design decisions. Please reach me through my account information on my GitHub profile. 
 
 ## Accessability
-I am using gifs and images in this walkthrough. If you or the screen reader can not interepret I will place links to the direct code that I am referencing under each image. Note on the GIFs, everything I go over here is covered in the demo video. The subtitles of the demo video are provided by Youtube. 
+I am using gifs and images in this walkthrough. If you or the screen reader can not interepret the images I will place links to the direct code that I am referencing under each image. Note on the GIFs, everything I go over here is covered in the demo video. The subtitles of the demo video are provided by Youtube. 
 
 ### Table of Contents
 1. [Purpose](#purpose)
@@ -12,12 +12,17 @@ I am using gifs and images in this walkthrough. If you or the screen reader can 
    1. [Sign-In](#sign-in)
         1. [Authentification](#auth)
    1. [Dashboard](#dashboard)
-         1. [Meal Plan Excerpt](#mp-card)
-         1. [Drag and Drop Editor](#dnd)
+   1. [Meal Plans](#meal-plans)
+   1. [Navigation and Routing](#nvr)
+        1. [Routing](#routing)
+        1. [Navigation](#navigation)
    1. [Recipes](#recipes)
         1. [Dynamic Database Search](#ddbs)
         1. [Recipe Show Page](#recipe)
-   1. [Meal Plans](#meal-plans)
+   1. [Meal Plan Editor](#mpe)
+        1. [Drag and Drop](#dnd)
+   1. [Logout](#logout)
+  
 4. [Flavorite Sections of Code](#flavorites)
 
 
@@ -31,7 +36,7 @@ link to demo video
 ## Features <a name="features"></a>
 Transcript for the demonstration. We will go through  each features of the application as a user and how I accomplish these through code. 
 
-### Sign-up & Login  <a name="sign-in"></a>
+## Sign-up & Login  <a name="sign-in"></a>
 
 Sign up for the application is managed mostly on the backend. With user validations / Bcrypt / and JWT tokens. Front end validations are mostly form validation i.e password, char length etc. 
 
@@ -113,10 +118,11 @@ We can use the button on the cared to follow it to the meal plan recipe display 
 
 
 **Before we more on** Let us take a look on how we are going to be navigating in the application. 
-## Navigation and Routes
+
+## Navigation and Routes  <a name="nvr"></a>
 This section is split into two sections, the navigation in the application using the drawer buttons and how the routing is set up. 
 
-### Routing 
+### Routing <a name="routing"></a>
 I am using React Router v.5.2 which is the latest version and I take advantage of their great hooks. 
 
 I leveraged React's power of composition to create private routes and public routes. 
@@ -140,7 +146,7 @@ This is where the magic happens though. We use the private route as a component 
 [Private Route Code](src/features/routes/PrivateRoutes.js)
 >Double composition with a conditional render. Doesn't get more React than that. 
 
-### Navigation
+### Navigation <a name="navigation"></a>
 
 I again leverage compositon to help create menu list items that are link components/icon buttons.
 
@@ -193,7 +199,7 @@ This is doing a dynamic query of the database. Leveraging the citext properties 
 
 [Search Code](src/features/recipes/RecipeIndex.js)
 
-### Show 
+### Show  <a name="recipe"></a>
 No matter the navigation path, a recipe excerpt will lead to the recipe render page. That will render many different components that all deal with the individual recipe data: 
 - title
 - metadata
@@ -220,7 +226,7 @@ Having the select form on the navigation drawer is a deliberate design. As you e
 
 ![private route](src/img/add-recipe.gif)
 
-### Meal Plan Edit <a name="auth"></a>
+## Meal Plan Edit <a name="mpe"></a>
 As soon as you select a recipe you are directed to the edit page for the meal plan. You can also navigate here through the Dashboard. 
 
 ![Meal Plan Navigartion](src/img/edit-meal-plan.gif)
@@ -231,6 +237,8 @@ On the dashboard the meal plan preview populates with the images of the recipes 
 
 ![Meal Plan Dashboard](src/img/meal-plan-dash.gif)
 
+
+### Drag and Drop Editor <a name="dnd"></a>
 Here is a demonstration of CRUD actions in the drag and drop editor. 
 
 You can: 
@@ -247,7 +255,7 @@ The drag and drop is a complex beast that took me multiple days out of my two-we
 
 I used the React Beautiful dnd npm package to help with my zoning. This did not play well with the Material-Ui componenents naturally as you are refencing DOM elements not virtual DOM elements when you implement a drag and drop feature. I worked around this by digging into the Material-Ui documentation. Feel free to explore the code more. 
 
-### Logout 
+## Logout <a name="logout"></a>
 With logging out we have to make sure to rid the token out of local storage and remove the client from the protected routes, otherwise the fetches will not bring back anything and the app will crash. 
 
 With protected routes though if they are no longer logged in they get pushed to the log-in page. My solution for logging out is like so: 
